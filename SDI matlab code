@@ -1,0 +1,28 @@
+function decomp=succdecomp(x)
+if size(x,2)>=2 
+    x=x'; 
+end
+seg_eeg=x;
+N=length(seg_eeg);
+n=ceil(log(length(x))/log(2));
+NoZerosPadd=(2^n)-length(x);
+x=vertcat(x,zeros(NoZerosPadd,1));
+y=x;
+x=abs(x);
+L=round(3.33*log10(length(x)));
+for k=1:round(3.33*log10(length(x)))
+        j=0;
+    for i=1:2:length(x)
+        j=j+1;        
+        x(j)=(x(i)+x(i+1))/2;     
+        y(j)=(y(i)-y(i+1))/2; 
+    end
+       x=x(1:round(length(x)/2));          
+       y=y(1:round(length(y)/2));  
+end
+a=x;
+s=y;
+aa=(a+s)/2;
+ss=(a-s)/2;
+decomp=log10((N/L)*det([a ss;s aa]));
+end
